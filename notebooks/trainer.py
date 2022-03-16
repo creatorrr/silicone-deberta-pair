@@ -39,15 +39,15 @@ def train(resume=False):
     training_args = TrainingArguments(
         weight_decay=0.01,
         learning_rate=3e-5,
-        per_device_train_batch_size=15,
-        per_device_eval_batch_size=1,
+        per_device_train_batch_size=100,
+        per_device_eval_batch_size=20,
         num_train_epochs=4,
         lr_scheduler_type="constant_with_warmup",
         warmup_ratio=0.075,
 
         fp16=True,
         # sharded_ddp="simple",
-        deepspeed="./ds_config.json",
+        # deepspeed="./ds_config.json",
         do_train=True,
         overwrite_output_dir=(not resume),
         output_dir="./outputs",
@@ -68,7 +68,7 @@ def train(resume=False):
         train_dataset=tokenized_dataset["train"],
         eval_dataset=tokenized_dataset["test"],
         tokenizer=tokenizer,
-        # data_collator=data_collator,
+        data_collator=data_collator,
     )
 
     if resume:
